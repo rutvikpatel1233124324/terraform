@@ -1,7 +1,7 @@
 # key pair(login)
 resource "aws_key_pair" "my_key" {
-  key_name = "terraform-form-devoosdde"
-  public_key = file("terraform-for-devoosde.pub")
+  key_name = "terraform-for-devops"
+  public_key = file("terraform-for-devops.pub")
 }
 
 # vpc & security group
@@ -50,11 +50,11 @@ egress {
 resource "aws_instance" "my_instance" {
     key_name = aws_key_pair.my_key.key_name
     security_groups = [aws_security_group.my_security.name]
-    instance_type = "t2.micro"
-    ami = "ami-0d1b5a8c13042c939" #ubuntu
-
+    instance_type = var.ec2_instance_type
+    ami = var.ec2_ami_id
+    user_data = file("install-nginx.sh")
     root_block_device {
-      volume_size = 8
+      volume_size = var.ec2_root_volume_size
       volume_type = "gp3"
     }
 
